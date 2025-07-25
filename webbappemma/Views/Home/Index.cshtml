@@ -1,0 +1,145 @@
+﻿@{
+    ViewData["Title"] = "Login";
+}
+
+<style>
+    body, html {
+        height: 100%;
+        margin: 0;
+        padding: 0;
+    }
+
+    .background-slider-container {
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100vw;
+        height: 100vh;
+        z-index: -1;
+        overflow: hidden;
+    }
+
+    .background-slide {
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background-size: cover;
+        background-position: center;
+        transition: transform 1s cubic-bezier(.77,0,.18,1);
+        will-change: transform;
+    }
+
+        .background-slide.top {
+            z-index: 2;
+        }
+
+        .background-slide.bottom {
+            z-index: 1;
+        }
+
+    .login-card-transparent {
+        background: rgba(255,255,255,0.25) !important;
+        backdrop-filter: blur(8px);
+        box-shadow: 0 8px 32px 0 rgba(31,38,135,0.37);
+        border-radius: 20px;
+        border: 1px solid rgba(255,255,255,0.18);
+    }
+</style>
+
+<div class="background-slider-container">
+    <div class="background-slide bottom" id="bg-bottom"></div>
+    <div class="background-slide top" id="bg-top"></div>
+</div>
+
+<div class="d-flex justify-content-center align-items-center" style="min-height: 80vh;">
+    <div class="card p-5 shadow login-card-transparent" style="min-width: 420px; max-width: 500px; width: 100%;">
+        <h2 class="mb-5 text-center" style="font-size:2.2rem;">Iniciar Sesión</h2>
+        <form id="loginForm" autocomplete="off">
+            <div class="mb-4">
+                <label for="usuario" class="form-label text-center w-100" style="font-size:1.2rem;">Usuario</label>
+                <input type="text" class="form-control form-control-lg" id="usuario" placeholder="Usuario o Email" autocomplete="off">
+            </div>
+            <div class="mb-4">
+                <label for="contrasena" class="form-label text-center w-100" style="font-size:1.2rem;">Contraseña</label>
+                <input type="password" class="form-control form-control-lg" id="contrasena" placeholder="********" autocomplete="off">
+            </div>
+            <div class="d-grid mb-3" id="loginBtnContainer">
+                <button type="submit" class="btn btn-primary btn-lg rounded-pill" id="loginBtn">Ingresar</button>
+            </div>
+            <div class="mb-3" id="progressContainer" style="display:none;">
+                <div class="progress">
+                    <div id="loginProgress" class="progress-bar progress-bar-striped progress-bar-animated" style="width: 0%"></div>
+                </div>
+            </div>
+            <div class="text-danger text-center" id="loginError" style="display:none;"></div>
+        </form>
+    </div>
+</div>
+
+<script>
+    const images = [
+        '/images/01.jpg',
+        '/images/02.jpg',
+        '/images/03.jpg'
+    ];
+    let current = 0;
+    let next = 1;
+    const bgBottom = document.getElementById('bg-bottom');
+    const bgTop = document.getElementById('bg-top');
+    bgBottom.style.backgroundImage = `url('${images[current]}')`;
+    bgTop.style.backgroundImage = `url('${images[next]}')`;
+    bgTop.style.transform = 'translateX(-100%)';
+    function slideBackground() {
+        bgTop.style.backgroundImage = `url('${images[next]}')`;
+        bgTop.style.transform = 'translateX(-100%)';
+        void bgTop.offsetWidth;
+        bgTop.style.transition = 'transform 1s cubic-bezier(.77,0,.18,1)';
+        bgTop.style.transform = 'translateX(0%)';
+        setTimeout(() => {
+            bgBottom.style.backgroundImage = `url('${images[next]}')`;
+            bgTop.style.transition = 'none';
+            bgTop.style.transform = 'translateX(-100%)';
+            current = next;
+            next = (next + 1) % images.length;
+        }, 1000);
+    }
+    setInterval(slideBackground, 5000);
+
+    const loginForm = document.getElementById('loginForm');
+    const loginBtnContainer = document.getElementById('loginBtnContainer');
+    const progressContainer = document.getElementById('progressContainer');
+    const progressBar = document.getElementById('loginProgress');
+    const loginError = document.getElementById('loginError');
+
+    loginForm.addEventListener('submit', function (e) {
+        e.preventDefault();
+        loginError.style.display = 'none';
+        loginBtnContainer.style.display = 'none';
+        progressContainer.style.display = 'block';
+        progressBar.style.width = '0%';
+
+        let progress = 0;
+        const interval = setInterval(() => {
+            progress += 10;
+            progressBar.style.width = progress + '%';
+            if (progress >= 100) {
+                clearInterval(interval);
+
+                const usuario = document.getElementById('usuario').value;
+                const contrasena = document.getElementById('contrasena').value;
+
+                if (usuario === 'admin' && contrasena === '1234') {
+                    alert('¡Credenciales correctas! (Simulado)');
+                    // redirigir o hacer submit 
+                } else {
+                    loginError.textContent = 'Credenciales incorrectas';
+                    loginError.style.display = 'block';
+                    loginBtnContainer.style.display = 'block';
+                    progressContainer.style.display = 'none';
+                }
+            }
+        }, 100);
+    });
+</script>
