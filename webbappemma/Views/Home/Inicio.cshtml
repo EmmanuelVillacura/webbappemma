@@ -1,0 +1,24 @@
+﻿@model webbappemma.Controllers.LoginViewModel
+
+<h2>Iniciar Sesión</h2>
+<form asp-action="Login" method="post">
+    <div>
+        <label>Usuario</label>
+        <input asp-for="Username" />
+    </div>
+    <div>
+        <label>Contraseña</label>
+        <input asp-for="Password" type="password" />
+    </div>
+    <button type="submit">Ingresar</button>
+</form>
+
+@if (!ViewData.ModelState.IsValid)
+{
+    <div style="color:red">
+        @foreach (var error in ViewData.ModelState.Values.SelectMany(v => v.Errors))
+        {
+            <div>@error.ErrorMessage</div>
+        }
+    </div>
+}

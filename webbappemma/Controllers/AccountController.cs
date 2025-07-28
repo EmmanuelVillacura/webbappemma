@@ -19,14 +19,14 @@ namespace webbappemma.Controllers
         [HttpGet]
         public IActionResult Login()
         {
-            return View();
+            return View("~/Views/Account/Login.cshtml");
         }
 
         [HttpPost]
         public async Task<IActionResult> Login(LoginViewModel model)
         {
             if (!ModelState.IsValid)
-                return View(model);
+                return View("~/Views/Home/Index1.cshtml", model);
 
             using (var connection = new SqlConnection(_connectionString))
             {
