@@ -56,14 +56,12 @@
 <div class="d-flex justify-content-center align-items-center" style="min-height: 80vh;">
     <div class="card p-5 shadow login-card-transparent" style="min-width: 420px; max-width: 500px; width: 100%;">
         <h2 class="mb-5 text-center" style="font-size:2.2rem;">Iniciar Sesión</h2>
-        <form id="loginForm" autocomplete="off">
+        <form id="loginForm" method="post" action="/Account/Login" autocomplete="off">
             <div class="mb-4">
-                <label for="usuario" class="form-label text-center w-100" style="font-size:1.2rem;"></label>
-                <input type="text" class="form-control form-control-lg" id="usuario" placeholder="Usuario o Email" autocomplete="off">
+                <input type="text" class="form-control form-control-lg" id="Username" name="Username" placeholder="Usuario" autocomplete="off" required>
             </div>
             <div class="mb-4">
-                <label for="contrasena" class="form-label text-center w-100" style="font-size:1.2rem;"></label>
-                <input type="password" class="form-control form-control-lg" id="contrasena" placeholder="********" autocomplete="off">
+                <input type="password" class="form-control form-control-lg" id="Password" name="Password" placeholder="********" autocomplete="off" required>
             </div>
             <div class="d-grid mb-3" id="loginBtnContainer">
                 <button type="submit" class="btn btn-primary btn-lg rounded-pill" id="loginBtn">Ingresar</button>
@@ -80,9 +78,9 @@
 
 <script>
     const images = [
-        '/images/01.jpg',
-        '/images/02.jpg',
-        '/images/03.jpg'
+        '/images/001.jpeg',
+        '/images/002.jpeg',
+        '/images/003.jpeg'
     ];
     let current = 0;
     let next = 1;
@@ -107,39 +105,5 @@
     }
     setInterval(slideBackground, 5000);
 
-    const loginForm = document.getElementById('loginForm');
-    const loginBtnContainer = document.getElementById('loginBtnContainer');
-    const progressContainer = document.getElementById('progressContainer');
-    const progressBar = document.getElementById('loginProgress');
-    const loginError = document.getElementById('loginError');
-
-    loginForm.addEventListener('submit', function (e) {
-        e.preventDefault();
-        loginError.style.display = 'none';
-        loginBtnContainer.style.display = 'none';
-        progressContainer.style.display = 'block';
-        progressBar.style.width = '0%';
-
-        let progress = 0;
-        const interval = setInterval(() => {
-            progress += 10;
-            progressBar.style.width = progress + '%';
-            if (progress >= 100) {
-                clearInterval(interval);
-
-                const usuario = document.getElementById('usuario').value;
-                const contrasena = document.getElementById('contrasena').value;
-
-                if (usuario === 'admin' && contrasena === '1234') {
-                    alert('¡Credenciales correctas! (Simulado)');
-                    // redirigir o hacer submit 
-                } else {
-                    loginError.textContent = 'Credenciales incorrectas';
-                    loginError.style.display = 'block';
-                    loginBtnContainer.style.display = 'block';
-                    progressContainer.style.display = 'none';
-                }
-            }
-        }, 100);
-    });
+    // Opcional: corrige los ids en el JS si usas validación personalizada
 </script>
